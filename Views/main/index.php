@@ -1,0 +1,1 @@
+<p>Pages d'accueil du site</p>
