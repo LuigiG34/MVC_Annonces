@@ -8,6 +8,7 @@ class UsersModel extends Model
     protected $email;
     protected $password;
     protected $roles;
+    protected $token;
 
     public function __construct()
     {
@@ -107,6 +108,26 @@ class UsersModel extends Model
     public function setRoles($roles)
     {
         $this->roles = json_decode($roles);
+
+        return $this;
+    }
+
+    /**
+     * Get the value of token
+     */ 
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set the value of token
+     *
+     * @return  self
+     */ 
+    public function setToken($token)
+    {
+        $this->token = $token;
 
         return $this;
     }

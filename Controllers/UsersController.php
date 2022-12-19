@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\PhpMailer\Mailer;
 use App\Core\Form;
 use App\Models\UsersModel;
 
@@ -93,6 +94,106 @@ class UsersController extends Controller
         ->finForm();
 
         $this->render('users/register', ['registerForm' => $form->create()]); 
+    }
+
+    /**
+     * Envoie un email avec le lien pour reset le mot de passe
+     *
+     * @return void
+     */
+    public function resetPassword()
+    {
+        if(Form::validation($_POST, ['email'])){
+            // On retire les balise HTML
+            $email = strip_tags($_POST['email']);
+
+            // On instancie notre model
+            $usersModel = new UsersModel;
+            // On recupere l'utilisateur grace à son email
+            $user = $usersModel->findOneBy('email', $email);
+
+            // On vérifie si l'utilisateur existe
+            if(!$user){
+                GlobalController::alert('danger', 'Aucun utilisateur lié à cette adresse mail.');
+                header('Location: /mvc/public/users/resetPassword');
+                exit;
+            }
+
+            // On hydrate
+            $user = $usersModel->hydrate($user);
+            
+            // On génere le token
+            $token = bin2hex(random_bytes(32));
+            // On hydrate
+            $user->setToken($token);
+            // On met à jour le token en bdd
+            $user->update();
+
+            // On envoie le mail
+            $mailer = new Mailer;
+            $mailer->resetPassword($user->getEmail(), "http://localhost/mvc/public/users/newPassword/$token");
+
+            GlobalController::alert('success','Un mail vient de vous être envoyé. (Vérifié vos spams)');
+        }
+
+        // On génère le premier formulaire
+        $form = new Form;
+
+        $form->debutForm()
+        ->ajoutLabelFor('email', 'Email :')
+        ->ajoutInput('email', 'email', ['class' => 'form-control', 'id' => 'email'])
+        ->ajoutBouton("Confirmer", ['class' => 'btn btn-primary'])
+        ->finForm();
+
+        $this->render('users/reset', ['resetForm' => $form->create()]); 
+    }
+
+    /**
+     * L'utilisateur reset son mot de passe avec le mail qu'on lui a envoyé
+     *
+     * @param string $token
+     */
+    public function newPassword(string $token)
+    {
+        // On récupère l'utilisateur via le token en paramètre
+        $usersModel = new UsersModel;
+        $user = $usersModel->findOneBy('token', $token);
+
+        if(!$user){
+            GlobalController::alert('danger', 'Vous n\'avez pas accès à cette page.');
+            header('Location: /mvc/public/users/resetPassword');
+            exit;
+        }
+
+        // On vérifie les input
+        if(Form::validation($_POST, ['password'])){
+            // On hash le mot de passe
+            $password = password_hash(strip_tags($_POST['password']), PASSWORD_ARGON2I);
+            // On hydrate l'utilisateur
+            $user = $usersModel->hydrate($user);
+
+            // On mets à jour son mot de passe et son token
+            $user->setToken('NULL');
+            $user->setPassword($password);
+
+            // On mets à jour le user dans la BDD
+            $user->update();
+
+            // On renvoie un message de succès et on redirige vers le login
+            GlobalController::alert('success', 'Vous avez modifié votre mot de passe');
+            header('Location: /mvc/public/users/login');
+        }
+
+        // On génère le premier formulaire
+        $form = new Form;
+
+        $form->debutForm()
+        ->ajoutLabelFor('password', 'Nouveau mot de passe :')
+        ->ajoutInput('password', 'password', ['class' => 'form-control', 'id' => 'password'])
+        ->ajoutBouton("Confirmer", ['class' => 'btn btn-primary'])
+        ->finForm();
+
+        $this->render('users/new-password', ['newPasswordForm' => $form->create()]); 
     }
 
     /**
