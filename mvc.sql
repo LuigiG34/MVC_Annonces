@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : dim. 18 déc. 2022 à 19:48
+-- Généré le : lun. 19 déc. 2022 à 16:33
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.1.2
 
@@ -31,6 +31,7 @@ CREATE TABLE `annonces` (
   `id` int(11) NOT NULL,
   `titre` varchar(255) NOT NULL,
   `description` text NOT NULL,
+  `image` varchar(255) NOT NULL,
   `created_at` date NOT NULL DEFAULT current_timestamp(),
   `actif` int(11) NOT NULL DEFAULT 1,
   `users_id` int(11) NOT NULL
@@ -40,11 +41,12 @@ CREATE TABLE `annonces` (
 -- Déchargement des données de la table `annonces`
 --
 
-INSERT INTO `annonces` (`id`, `titre`, `description`, `created_at`, `actif`, `users_id`) VALUES
-(3, '1ère Annonce', 'Ma premiere description', '2022-12-18', 1, 5),
-(4, '2eme Annonce', 'Ma deuxieme description', '2022-12-18', 1, 4),
-(6, 'Annonce inactif', 'Ma description inactif', '2022-12-18', 0, 4),
-(7, 'Annonce modifié', 'Description de l\'annonce modifié', '2022-12-18', 1, 4);
+INSERT INTO `annonces` (`id`, `titre`, `description`, `image`, `created_at`, `actif`, `users_id`) VALUES
+(10, '1ere annonce', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel pellentesque eros. Donec non lectus in dolor sodales consequat. Etiam vitae nisl turpis. Donec erat quam, porttitor a fringilla eu, dictum et est. Duis ut finibus dui. Curabitur suscipit semper turpis, sit amet ornare dui. Ut vel libero eu eros efficitur commodo. Vivamus congue commodo odio at commodo. Maecenas mattis finibus ante fringilla ornare. Nulla convallis tempus rutrum. Phasellus faucibus commodo neque, id aliquam est dignissim id. Quisque non tortor ut orci mollis ultrices et vel ligula. Proin volutpat elit nec elementum tempor.', '33401_tree-736885__480.jpg', '2022-12-19', 1, 4),
+(11, '2eme annonce', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel pellentesque eros. Donec non lectus in dolor sodales consequat. Etiam vitae nisl turpis. Donec erat quam, porttitor a fringilla eu, dictum et est. Duis ut finibus dui. Curabitur suscipit semper turpis, sit amet ornare dui. Ut vel libero eu eros efficitur commodo. Vivamus congue commodo odio at commodo. Maecenas mattis finibus ante fringilla ornare. Nulla convallis tempus rutrum. Phasellus faucibus commodo neque, id aliquam est dignissim id. Quisque non tortor ut orci mollis ultrices et vel ligula. Proin volutpat elit nec elementum tempor.', '98625_aaaaaaaa.jpg', '2022-12-19', 1, 4),
+(12, '3e annonce', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel pellentesque eros. Donec non lectus in dolor sodales consequat. Etiam vitae nisl turpis. Donec erat quam, porttitor a fringilla eu, dictum et est. Duis ut finibus dui. Curabitur suscipit semper turpis, sit amet ornare dui. Ut vel libero eu eros efficitur commodo. Vivamus congue commodo odio at commodo. Maecenas mattis finibus ante fringilla ornare. Nulla convallis tempus rutrum. Phasellus faucibus commodo neque, id aliquam est dignissim id. Quisque non tortor ut orci mollis ultrices et vel ligula. Proin volutpat elit nec elementum tempor.', '99595_sdlknsk.jpg', '2022-12-19', 1, 4),
+(13, 'Annonce inactif', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel pellentesque eros. Donec non lectus in dolor sodales consequat. Etiam vitae nisl turpis. Donec erat quam, porttitor a fringilla eu, dictum et est. Duis ut finibus dui. Curabitur suscipit semper turpis, sit amet ornare dui. Ut vel libero eu eros efficitur commodo. Vivamus congue commodo odio at commodo. Maecenas mattis finibus ante fringilla ornare. Nulla convallis tempus rutrum. Phasellus faucibus commodo neque, id aliquam est dignissim id. Quisque non tortor ut orci mollis ultrices et vel ligula. Proin volutpat elit nec elementum tempor.', '85040_Gull_portrait_ca_usa.jpg', '2022-12-19', 0, 4),
+(14, 'Annonce à modifié', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel pellentesque eros. Donec non lectus in dolor sodales consequat. Etiam vitae nisl turpis. Donec erat quam, porttitor a fringilla eu, dictum et est. Duis ut finibus dui. Curabitur suscipit semper turpis, sit amet ornare dui. Ut vel libero eu eros efficitur commodo. Vivamus congue commodo odio at commodo. Maecenas mattis finibus ante fringilla ornare. Nulla convallis tempus rutrum. Phasellus faucibus commodo neque, id aliquam est dignissim id. Quisque non tortor ut orci mollis ultrices et vel ligula. Proin volutpat elit nec elementum tempor.', '71112_newimg.jpg', '2022-12-19', 1, 4);
 
 -- --------------------------------------------------------
 
@@ -56,16 +58,17 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `roles` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
+  `roles` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '["ROLE_USER"]',
+  `token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`, `roles`) VALUES
-(4, 'admin@admin.com', '$argon2i$v=19$m=65536,t=4,p=1$WWF6bTZ6LlRUV1NSZkNBVQ$87viD2sPIOXf2U+Q3+R4nEi313AUWtukb2omuIXDMkc', '[\"ROLE_ADMIN\"]'),
-(5, 'aaaa@aaaa.com', '$argon2i$v=19$m=65536,t=4,p=1$OVloVEhOMm8ySEdsdmhXbg$L2LsF3LgM5j+5qUunh5DnJBQ2dHQkmvvlwCQZlrUqmc', NULL);
+INSERT INTO `users` (`id`, `email`, `password`, `roles`, `token`) VALUES
+(4, 'admin@admin.com', '$argon2i$v=19$m=65536,t=4,p=1$WWF6bTZ6LlRUV1NSZkNBVQ$87viD2sPIOXf2U+Q3+R4nEi313AUWtukb2omuIXDMkc', '[\"ROLE_ADMIN\"]', NULL),
+(5, 'aaaa@aaaa.com', '$argon2i$v=19$m=65536,t=4,p=1$OVloVEhOMm8ySEdsdmhXbg$L2LsF3LgM5j+5qUunh5DnJBQ2dHQkmvvlwCQZlrUqmc', '[\"ROLE_USER\"]', NULL);
 
 --
 -- Index pour les tables déchargées
@@ -92,13 +95,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `annonces`
 --
 ALTER TABLE `annonces`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Contraintes pour les tables déchargées
