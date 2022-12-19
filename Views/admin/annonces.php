@@ -5,6 +5,7 @@
         <th>ID</th>
         <th>Titre</th>
         <th>Contenu</th>
+        <th>Image</th>
         <th>Actif</th>
         <th>Actions</th>
     </thead>
@@ -13,7 +14,10 @@
             <tr>
                 <td><?= $annonce->id ?></td>
                 <td><?= $annonce->titre ?></td>
-                <td><?= $annonce->description ?></td>
+                <td><?= substr($annonce->description , 0, 70)  ?>...</td>
+                <td>
+                    <img src="/mvc/public/uploads/<?= $annonce->image ?>" alt="" width="25px" height="25px">
+                </td>
                 <td>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault<?= $annonce->id ?>" <?= $annonce->actif ? 'checked' : "" ?> data-id="<?= $annonce->id ?>">

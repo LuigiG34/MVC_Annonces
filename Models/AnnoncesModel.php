@@ -7,6 +7,7 @@ class AnnoncesModel extends Model
     protected $id;
     protected $titre;
     protected $description;
+    protected $image;
     protected $created_at;
     protected $actif;
     protected $users_id;
@@ -132,6 +133,26 @@ class AnnoncesModel extends Model
     public function setUsers_id($users_id)
     {
         $this->users_id = $users_id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of image
+     */ 
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Set the value of image
+     *
+     * @return  self
+     */ 
+    public function setImage($image)
+    {
+        $this->image = $image;
 
         return $this;
     }

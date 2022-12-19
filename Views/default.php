@@ -32,9 +32,6 @@
                         <?php endif; ?>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/mvc/public/users/profil">Profil</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="/mvc/public/users/logout">Se déconnecter</a>
                         </li>
                     <?php else : ?>

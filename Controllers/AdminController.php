@@ -36,11 +36,18 @@ class AdminController extends Controller
     public function supprimeAnnonce(int $id)
     {
         if($this->isAdmin()){
+            
             $annoncesModel = new AnnoncesModel;
 
-            $annoncesModel->delete($id);
-            
-            header('Location: /mvc/public/admin/annonces');
+            // Recupere l'image
+            $image = $annoncesModel->findOneBy("id", $id)->image;
+
+            // Si l'image existe supprime la et supprime l'annonce
+            if (file_exists('uploads/'.$image)) {
+                unlink('uploads/'.$image);
+                $annoncesModel->delete($id);
+                header('Location: /mvc/public/admin/annonces');
+            }
         }
     }
 
