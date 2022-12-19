@@ -2,7 +2,7 @@
 #### Ajouter PHPMailer -> Mot de passe oublié
 
 ######  Users (id, email, password, roles)
-######  Annonces (id, titre, description, actif, created_at, users_id)
+######  Annonces (id, titre, description, actif, image, created_at, users_id)
 
 ######  Traitement des images
 ######  AJAX -> modifier actif ou non
